@@ -84,6 +84,10 @@ describe SortedArray do
       sorted_array.inject(0){|sum,el| sum + el}.should == 25
     end
 
+    it "should use symbols" do
+      sorted_array.inject(:+).should == 25
+    end
+
     it "matches the .inject kernel" do
       sorted_array.inject(:+).should == source.inject(:+)
     end

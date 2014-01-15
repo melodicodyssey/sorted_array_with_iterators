@@ -69,9 +69,21 @@ class SortedArray
   def map! &block
     # raise NotImplementedError.new("You need to implement the map! method!")
   
-    new_array = []
-    each {|element| new_array << (yield element)}
-    @internal_arr = new_array
+    #BELOW CODE DOESN'T WORK
+    # each {|element| element = (yield element)}
+    # return @internal_arr
+
+    #WORKS:
+    # new_array = []
+    # each {|element| new_array << (yield element)}
+    # @internal_arr = new_array
+
+    i = 0
+    while i < @internal_arr.size
+      @internal_arr[i] = (yield @internal_arr[i])
+      i += 1
+    end
+    @internal_arr
 
 
   # new_array
@@ -116,10 +128,12 @@ class SortedArray
 
     if acc.class == Symbol
       method = acc.to_proc
-      acc = 0
+      method1 = method.to_proc  # :+
+      acc = @internal_arr.shift
 
       each do |element|
-        acc = method(acc,element)
+        acc = method1.call(acc,element)
+        # acc = acc+element
       end
 
 
@@ -130,7 +144,7 @@ class SortedArray
     # #     acc = method(element)
     # #   end
       return acc
-    end
+    else
 
     acc == nil ? acc = 0 : acc = acc
     
@@ -140,6 +154,7 @@ class SortedArray
     end
 
     return acc
+  end
 
 
   end
